@@ -2,7 +2,7 @@
 A utility to calculate the amount of CO2 equivalent that will be caused when travelling between 2 cities using a given transportation mode.
 
 
-How to build and run
+How to build and run ?
 
 To build
 
@@ -24,13 +24,11 @@ Sample run
 Your trip caused 49.2kg of CO2-equivalent.
 
 
-
-
-
-
-
-
-To resolve javax.net.ssl.SSLHandshakeException :
+<br />
+<br />
+<br />
+<br />
+**How to resolve javax.net.ssl.SSLHandshakeException ?**
 
 In case of the below exception 
 javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
