@@ -1,6 +1,5 @@
 package service;
 
-import config.Config;
 import exception.InvalidApiKeyException;
 import model.*;
 import org.apache.http.HttpEntity;

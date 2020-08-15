@@ -25,7 +25,6 @@ public enum TransportationMode {
     // Bus
     BUS("bus", 27),
     //Train
-
     TRAIN("train", 6);
 
 

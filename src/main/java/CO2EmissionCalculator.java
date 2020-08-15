@@ -1,7 +1,6 @@
-import exception.InvalidApiKeyException;
 import exception.InvalidCityException;
-import model.TransportationMode;
 import model.City;
+import model.TransportationMode;
 import service.RouteService;
 
 /**
@@ -15,6 +14,14 @@ public class CO2EmissionCalculator {
         this.routeService = routeService;
     }
 
+    /**
+     * Computes total CO2e in Kg for transportation between given cities with given mode of transportation
+     * @param startCity
+     * @param endCity
+     * @param transportationMode
+     * @return
+     * @throws Exception
+     */
     public double computeCO2EmissionInKg(String startCity, String endCity, String transportationMode)
             throws Exception {
         City geoCodedStartCity = routeService.geoCode(startCity);
