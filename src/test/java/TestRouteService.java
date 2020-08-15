@@ -5,6 +5,10 @@ import org.junit.Test;
 import service.RouteService;
 import service.RouteServiceImpl;
 
+/**
+ * City
+ * Class representing city, its geo-geometry along with BBox
+ */
 public class TestRouteService {
 
     private RouteService routeService;

@@ -6,7 +6,7 @@ public enum GeometryType {
     Rectangle("Rectangle");
 
     private String name;
-    private GeometryType(String name) {
+    GeometryType(String name) {
         this.name = name;
     }
 }

@@ -2,6 +2,10 @@ import model.TransportationMode;
 import model.City;
 import service.RouteService;
 
+/**
+ * CO2EmissionCalculator
+ * This is the main class to initiate the computation of CO2e for transportation between 2 cities
+ */
 public class CO2EmissionCalculator {
     private RouteService routeService;
 

@@ -1,5 +1,8 @@
 package model;
 
+/**
+ * Transportation methods in CO2e per passenger per km
+ */
 public enum TransportationMode {
     /* Small Cars */
     SMALL_DIESEL_CAR("small-diesel-car", 142),
