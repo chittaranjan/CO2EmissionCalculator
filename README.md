@@ -16,7 +16,8 @@ Run the application
 
 **./gradlew co2Calculator  -Pend="end city" -Pstart="start city" -PtransportationMethod="mode of transportation"**
 
-Sample run :
+Sample run 
+
 **./gradlew co2Calculator  -Pend="Berlin" -Pstart="Hamburg" -PtransportationMethod="medium-diesel-car"**
 
 > Task :co2Calculator
