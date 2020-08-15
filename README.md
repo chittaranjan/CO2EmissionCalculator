@@ -16,8 +16,8 @@ Run the application
 
 **./gradlew co2Calculator  -Pend="end city" -Pstart="start city" -PtransportationMethod="mode of transportation"**
 
-**Sample run :**
-./gradlew co2Calculator  -Pend="Berlin" -Pstart="Hamburg" -PtransportationMethod="medium-diesel-car"
+Sample run :
+**./gradlew co2Calculator  -Pend="Berlin" -Pstart="Hamburg" -PtransportationMethod="medium-diesel-car"**
 
 > Task :co2Calculator
 Your trip caused 49.2kg of CO2-equivalent.
