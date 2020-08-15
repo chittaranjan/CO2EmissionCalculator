@@ -35,4 +35,4 @@ To resolve javax.net.ssl.SSLHandshakeException :
 In case of the below exception 
 javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
 
-Please mae sure to import valid root certificate to java cacert
+Please make sure to import valid root certificate to java cacert
