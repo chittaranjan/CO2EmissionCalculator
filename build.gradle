@@ -18,7 +18,7 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
-task co2Calulator(type: JavaExec) {
+task co2Calculator(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     main = 'Solution'
     args = [project.start,project.end, project.transportationMethod]

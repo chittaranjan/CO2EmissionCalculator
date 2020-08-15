@@ -14,11 +14,11 @@ Run the tests
 
 Run the application
 
-**./gradlew co2Calulator  -Pend="<start city>" -Pstart="<end city>" -PtransportationMethod="<mode of transportation>"**
+**./gradlew co2Calculator  -Pend="<start city>" -Pstart="<end city>" -PtransportationMethod="<mode of transportation>"**
 
 **Sample run :**
-./gradlew co2Calulator  -Pend="Berlin" -Pstart="Hamburg" -PtransportationMethod="medium-diesel-car"
+./gradlew co2Calculator  -Pend="Berlin" -Pstart="Hamburg" -PtransportationMethod="medium-diesel-car"
 
-> Task :co2Calulator
+> Task :co2Calculator
 Your trip caused 49.2kg of CO2-equivalent.
 
