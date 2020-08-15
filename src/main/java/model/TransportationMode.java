@@ -1,6 +1,6 @@
 package model;
 
-public enum CO2Emission {
+public enum TransportationMode {
     /* Small Cars */
     SMALL_DIESEL_CAR("small-diesel-car", 142),
     SMALL_PETROL_CAR("small-petrol-car", 154),
@@ -17,19 +17,29 @@ public enum CO2Emission {
     LARGE_DIESEL_CAR("large-diesel-car", 209),
     LARGE_PETROL_CAR("large-petrol-car", 282),
     LARGE_PLUGIN_HYBRID_CAR("large-plugin-hybrid-car", 126),
-    LARGE_ELECTRIC_CAR("large-electric-car", 73);
+    LARGE_ELECTRIC_CAR("large-electric-car", 73),
+
+    // Bus
+    BUS("bus", 27),
+    //Train
+
+    TRAIN("train", 6);
 
 
-    public final String transportationMode;
-    public final int averageCo2Emission;
+    private final String transportationMode;
+    private final int averageCo2Emission;
 
-    private CO2Emission(String transportationMode, int averageCo2Emission) {
+    TransportationMode(String transportationMode, int averageCo2Emission) {
         this.transportationMode = transportationMode;
         this.averageCo2Emission = averageCo2Emission;
     }
 
-    public static CO2Emission usingTransportationMode(String transportationMode) {
-        for (CO2Emission emission : values()) {
+    public int getAverageCo2Emission() {
+        return averageCo2Emission;
+    }
+
+    public static TransportationMode usingTransportationMode(String transportationMode) {
+        for (TransportationMode emission : values()) {
             if (emission.transportationMode.equals(transportationMode)) {
                 return emission;
             }

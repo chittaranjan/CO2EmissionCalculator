@@ -1,8 +1,7 @@
+import model.TransportationMode;
 import model.City;
 import service.RouteService;
 import service.RouteServiceImpl;
-
-import java.text.DecimalFormat;
 
 public class Solution {
 
@@ -29,8 +28,15 @@ public class Solution {
             System.out.println("Unable to geocode city with name " + destination);
             System.exit(0);
         }
-        double amountOfCo2 = co2EmissionCalculator.computeCO2EmissionInKg(city1, city2, transportationMode);
-        DecimalFormat decimalFormat = new DecimalFormat("0.0");
-        System.out.println("Your trip caused " + decimalFormat.format(amountOfCo2) + "kg of CO2-equivalent.");
+
+        TransportationMode usingTransportationMode = null;
+        try {
+            usingTransportationMode = TransportationMode.usingTransportationMode(transportationMode);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getLocalizedMessage());
+            System.exit(0);
+        }
+        double amountOfCo2 = co2EmissionCalculator.computeCO2EmissionInKg(city1, city2, usingTransportationMode);
+        System.out.println("Your trip caused " + String.format("%.1f", amountOfCo2) + "kg of CO2-equivalent.");
     }
 }

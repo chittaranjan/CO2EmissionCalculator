@@ -10,7 +10,7 @@ To build
 
 Run the tests
 
-**./gradlew test**
+**./gradlew clean test**
 
 Run the application
 
