@@ -20,7 +20,7 @@ public class TestRouteService {
     public void setupBeforeAllTests() {
         apiKeyService = new APIKeyServiceImpl();
         Assert.assertTrue(apiKeyService.isValidApiKeyPresent());
-        routeService = new RouteServiceImpl();
+        routeService = new RouteServiceImpl(apiKeyService);
     }
 
     @Test

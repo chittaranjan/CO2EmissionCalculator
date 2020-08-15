@@ -1,5 +1,3 @@
-import model.City;
-import model.TransportationMode;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,25 +16,25 @@ public class TestCo2Calculator {
     public void setUp() {
         apiKeyService = new APIKeyServiceImpl();
         Assert.assertTrue(apiKeyService.isValidApiKeyPresent());
-        routeService = new RouteServiceImpl();
+        routeService = new RouteServiceImpl(apiKeyService);
         co2EmissionCalculator = new CO2EmissionCalculator(routeService);
     }
 
     @Test
     public void testCorrectCo2CalculationForTwoValidCitiesWithMediumDieselCarMode() throws Exception {
-        City berlin = routeService.geoCode("Berlin");
-        City hamburg = routeService.geoCode("Hamburg");
+        String berlin = "Berlin";
+        String hamburg = "Hamburg";
         String transportMode = "medium-diesel-car";
-        double co2Emission = co2EmissionCalculator.computeCO2EmissionInKg(hamburg, berlin, TransportationMode.usingTransportationMode(transportMode));
+        double co2Emission = co2EmissionCalculator.computeCO2EmissionInKg(hamburg, berlin, transportMode);
         Assert.assertEquals(String.valueOf(49.2), String.format("%.1f",co2Emission));
     }
 
     @Test
     public void testCorrectCo2CalculationForTwoValidCitiesWithLargeElectricCar() throws Exception{
-        City newYork = routeService.geoCode("New York");
-        City losAngeles = routeService.geoCode("Los Angeles");
+        String newYork = "New York";
+        String losAngeles = "Los Angeles";
         String transportMode = "medium-diesel-car";
-        double co2Emission = co2EmissionCalculator.computeCO2EmissionInKg(losAngeles, newYork, TransportationMode.usingTransportationMode(transportMode));
+        double co2Emission = co2EmissionCalculator.computeCO2EmissionInKg(losAngeles, newYork, transportMode);
         Assert.assertEquals(String.valueOf(770.4), String.format("%.1f",co2Emission));
     }
 }

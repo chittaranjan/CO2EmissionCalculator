@@ -1,4 +1,5 @@
 import exception.InvalidApiKeyException;
+import exception.InvalidCityException;
 import model.TransportationMode;
 import model.City;
 import service.RouteService;
@@ -14,14 +15,26 @@ public class CO2EmissionCalculator {
         this.routeService = routeService;
     }
 
-    public double computeCO2EmissionInKg(City city1, City city2, TransportationMode transportationMode) {
-        double distance = 0;
-        try {
-            distance = this.routeService.getDistance(city1, city2);
-        } catch (InvalidApiKeyException invalidApiKeyException) {
-            invalidApiKeyException.printStackTrace();
+    public double computeCO2EmissionInKg(String startCity, String endCity, String transportationMode)
+            throws Exception {
+        City geoCodedStartCity = routeService.geoCode(startCity);
+        if (geoCodedStartCity == null) {
+            throw new InvalidCityException(startCity);
         }
-        double averageCo2EmissionInGram = transportationMode.getAverageCo2Emission();
+
+        City geoCodedEndCity = routeService.geoCode(endCity);
+        if (geoCodedEndCity == null) {
+            throw new InvalidCityException(startCity);
+        }
+
+        //Compute distance
+        double distance = this.routeService.getDistance(geoCodedStartCity, geoCodedEndCity);
+
+        //Fetch the CO2 for the given trabsportation mode
+        TransportationMode usingTransportationMode = TransportationMode.usingTransportationMode(transportationMode);
+        double averageCo2EmissionInGram = usingTransportationMode.getAverageCo2Emission();
+
+        //Calculate the amount of CO2e in Kg and return
         double amountOfCo2 = (distance * averageCo2EmissionInGram)/1000;
         return amountOfCo2;
     }

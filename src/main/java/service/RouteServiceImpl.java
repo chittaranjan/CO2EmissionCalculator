@@ -28,11 +28,9 @@ public class RouteServiceImpl implements RouteService {
     private static final String API_KEY = "api_key";
     private static final String TEXT = "text";
     private static final String SIZE = "size";
-    private Config config;
 
-    public RouteServiceImpl() {
-        apiKeyService = new APIKeyServiceImpl();
-        config = Config.getInstance();
+    public RouteServiceImpl(APIKeyService apiKeyService) {
+        this.apiKeyService = apiKeyService;
     }
 
     @Override
