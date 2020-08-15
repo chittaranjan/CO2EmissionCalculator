@@ -1,8 +1,8 @@
-import model.CO2Emission;
 import model.City;
-import model.Profile;
 import service.RouteService;
 import service.RouteServiceImpl;
+
+import java.text.DecimalFormat;
 
 public class Solution {
 
@@ -15,7 +15,9 @@ public class Solution {
         String destination = args[1];
         String transportationMode = args[2];
 
+        //Inject RouteService to the calculator
         RouteService routeService = new RouteServiceImpl();
+        CO2EmissionCalculator co2EmissionCalculator = new CO2EmissionCalculator(routeService);
 
         City city1 = routeService.geoCode(source);
         if (city1 == null) {
@@ -27,11 +29,8 @@ public class Solution {
             System.out.println("Unable to geocode city with name " + destination);
             System.exit(0);
         }
-        double distance = routeService.getDistance(city1, city2, Profile.DRIVING_CAR);
-        double averageCo2Emission = CO2Emission.usingTransportationMode(transportationMode).averageCo2Emission;
-        double amountOfCo2 = distance * averageCo2Emission;
-
-        System.out.println("Your trip caused " + amountOfCo2 + "kg of CO2-equivalent.");
-
+        double amountOfCo2 = co2EmissionCalculator.computeCO2EmissionInKg(city1, city2, transportationMode);
+        DecimalFormat decimalFormat = new DecimalFormat("0.0");
+        System.out.println("Your trip caused " + decimalFormat.format(amountOfCo2) + "kg of CO2-equivalent.");
     }
 }

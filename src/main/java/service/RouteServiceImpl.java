@@ -6,8 +6,10 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -54,15 +56,56 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public double getDistance(City city1, City city2, Profile profile) {
+    public Double getDistance(City city1, City city2) {
+        return getDistanceWithProfile(city1, city2, Profile.DRIVING_CAR);
+    }
+
+    @Override
+    public Double getDistanceWithProfile(City city1, City city2, Profile profile) {
+        if (city1 == null || city1.getGeometry() == null) {
+            throw new IllegalArgumentException("City1 must not be null and should have valid geometry.");
+        }
+
+        if (city2 == null || city2.getGeometry() == null) {
+            throw new IllegalArgumentException("City2 must not be null and should have valid geometry.");
+        }
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             String url = URL_MATRIX.concat(profile.getProfileName());
             URIBuilder uriBuilder = new URIBuilder(url);
 
-        } catch (Exception e) {
+            HttpPost httpPost = new HttpPost(uriBuilder.toString());
+            httpPost.addHeader(HttpHeaders.CONTENT_TYPE, String.valueOf(ContentType.APPLICATION_JSON));
+            httpPost.addHeader(HttpHeaders.ACCEPT, String.valueOf(ContentType.APPLICATION_JSON));
+            httpPost.addHeader(HttpHeaders.AUTHORIZATION, config.getAPIKey());
 
+            //Json Payload
+            JSONObject jsonObject = new JSONObject();
+
+            //Location matrix
+            JSONArray locations = new JSONArray();
+            locations.put(0, city1.getGeometry().getCoordinates());
+            locations.put(1, city2.getGeometry().getCoordinates());
+            jsonObject.put("locations", locations);
+
+            //Metrics: distance
+            JSONArray metrics = new JSONArray();
+            metrics.put(0, "distance");
+            jsonObject.put("metrics", metrics);
+
+            //Unit : km
+            jsonObject.put("units", "km");
+
+            httpPost.setEntity(new StringEntity(jsonObject.toString(), ContentType.APPLICATION_JSON));
+
+            try (CloseableHttpResponse closeableHttpResponse = httpClient.execute(httpPost)){
+                Double distance = getDistanceFromJsonResponseMatrix(closeableHttpResponse);
+                return distance;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return 0;
+        return null;
     }
 
     private City getFromHttpResponse(CloseableHttpResponse closeableHttpResponse) throws IOException {
@@ -120,6 +163,19 @@ public class RouteServiceImpl implements RouteService {
         LocationModel bottomRight = new LocationModel(bottomRightLat, bottomRightLong);
         BoundingBox boundingBox = new BoundingBox(topLeft, bottomRight);
         return boundingBox;
+    }
+
+    private Double getDistanceFromJsonResponseMatrix(CloseableHttpResponse closeableHttpResponse) throws IOException {
+        if (closeableHttpResponse.getStatusLine().getStatusCode() == 200) {
+            HttpEntity httpEntity = closeableHttpResponse.getEntity();
+            String result = EntityUtils.toString(httpEntity);
+
+            JSONObject jsonObject = new JSONObject(result);
+            JSONArray distanceMatrix = jsonObject.getJSONArray("distances");
+            JSONArray firstRow = distanceMatrix.getJSONArray(0);
+            return Double.valueOf(firstRow.getDouble(1));
+        }
+        return null;
     }
 
 }

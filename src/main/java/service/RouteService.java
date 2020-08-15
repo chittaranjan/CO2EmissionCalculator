@@ -19,5 +19,13 @@ public interface RouteService {
      * @param profile
      * @return
      */
-    double getDistance(City city1, City city2, Profile profile);
+    Double getDistanceWithProfile(City city1, City city2, Profile profile);
+
+    /**
+     * Computes distance between 2 cities with default profile i.e. DRIVING_CAR
+     * @param city1
+     * @param city2
+     * @return
+     */
+    Double getDistance(City city1, City city2);
 }

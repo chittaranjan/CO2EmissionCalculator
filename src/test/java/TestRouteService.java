@@ -28,4 +28,21 @@ public class TestRouteService {
         City city = routeService.geoCode("InvalidCity");
         Assert.assertNull(city);
     }
+
+    @Test
+    public void testDistanceBetweenTwoCities() {
+        City berlin = routeService.geoCode("Berlin");
+        City hamburg = routeService.geoCode("Hamburg");
+        Double distance = routeService.getDistance(berlin, hamburg);
+        Assert.assertNotNull(distance);
+        Assert.assertEquals(283.94, distance.doubleValue(), 0.0);
+    }
+
+    @Test
+    public void testDistanceBetweenSameCityShouldBeZero() {
+        City berlin = routeService.geoCode("Berlin");
+        Double distance = routeService.getDistance(berlin, berlin);
+        Assert.assertNotNull(distance);
+        Assert.assertEquals(0.0, distance.doubleValue(), 0.0);
+    }
 }

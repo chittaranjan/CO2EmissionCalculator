@@ -15,6 +15,14 @@ public class Geometry {
         return this.location;
     }
 
+    /**
+     * Return the geo coordinate as a array of latitude and longitude
+     * @return
+     */
+    public double[] getCoordinates() {
+        return new double[] {this.location.getLatitude(), this.location.getLongitude()};
+    }
+
     public static class Builder {
         private Geometry geometry;
 
