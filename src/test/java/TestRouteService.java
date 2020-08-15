@@ -2,6 +2,8 @@ import model.City;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import service.APIKeyService;
+import service.APIKeyServiceImpl;
 import service.RouteService;
 import service.RouteServiceImpl;
 
@@ -12,14 +14,17 @@ import service.RouteServiceImpl;
 public class TestRouteService {
 
     private RouteService routeService;
+    private APIKeyService apiKeyService;
 
     @Before
     public void setupBeforeAllTests() {
+        apiKeyService = new APIKeyServiceImpl();
+        Assert.assertTrue(apiKeyService.isValidApiKeyPresent());
         routeService = new RouteServiceImpl();
     }
 
     @Test
-    public void testGeoCodeValidCity() {
+    public void testGeoCodeValidCity() throws Exception {
         City city = routeService.geoCode("Berlin");
         Assert.assertNotNull(city);
         Assert.assertNotNull(city.getGeometry());
@@ -28,13 +33,13 @@ public class TestRouteService {
     }
 
     @Test
-    public void testGeoCodeInValidCity() {
+    public void testGeoCodeInValidCity() throws Exception {
         City city = routeService.geoCode("InvalidCity");
         Assert.assertNull(city);
     }
 
     @Test
-    public void testDistanceBetweenTwoCities() {
+    public void testDistanceBetweenTwoCities() throws Exception{
         City berlin = routeService.geoCode("Berlin");
         City hamburg = routeService.geoCode("Hamburg");
         Double distance = routeService.getDistance(berlin, hamburg);
@@ -43,7 +48,7 @@ public class TestRouteService {
     }
 
     @Test
-    public void testDistanceBetweenSameCityShouldBeZero() {
+    public void testDistanceBetweenSameCityShouldBeZero() throws Exception {
         City berlin = routeService.geoCode("Berlin");
         Double distance = routeService.getDistance(berlin, berlin);
         Assert.assertNotNull(distance);

@@ -1,6 +1,7 @@
 package service;
 
 import config.Config;
+import exception.InvalidApiKeyException;
 import model.*;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
@@ -21,6 +22,7 @@ import java.net.URISyntaxException;
 
 public class RouteServiceImpl implements RouteService {
 
+    private APIKeyService apiKeyService;
     private static final String URL_GEOCODE = "https://api.openrouteservice.org/geocode/search";
     private static final String URL_MATRIX = "https://api.openrouteservice.org/v2/matrix/";
     private static final String API_KEY = "api_key";
@@ -29,14 +31,18 @@ public class RouteServiceImpl implements RouteService {
     private Config config;
 
     public RouteServiceImpl() {
+        apiKeyService = new APIKeyServiceImpl();
         config = Config.getInstance();
     }
 
     @Override
-    public City geoCode(String cityName) {
+    public City geoCode(String cityName) throws InvalidApiKeyException{
+        if (apiKeyService.isValidApiKeyPresent() == false) {
+            throw new InvalidApiKeyException();
+        }
         try (CloseableHttpClient httpClient = HttpClients.createDefault()){
             URIBuilder uriBuilder = new URIBuilder(URL_GEOCODE);
-            uriBuilder.addParameter(API_KEY, config.getAPIKey());
+            uriBuilder.addParameter(API_KEY, apiKeyService.getApiKey());
             uriBuilder.addParameter(TEXT, cityName);
             uriBuilder.addParameter(SIZE, "1");
 
@@ -56,12 +62,18 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public Double getDistance(City city1, City city2) {
+    public Double getDistance(City city1, City city2) throws InvalidApiKeyException{
+        if (apiKeyService.isValidApiKeyPresent() == false) {
+            throw new InvalidApiKeyException();
+        }
         return getDistanceWithProfile(city1, city2, Profile.DRIVING_CAR);
     }
 
     @Override
-    public Double getDistanceWithProfile(City city1, City city2, Profile profile) {
+    public Double getDistanceWithProfile(City city1, City city2, Profile profile) throws InvalidApiKeyException {
+        if (apiKeyService.isValidApiKeyPresent() == false) {
+            throw new InvalidApiKeyException();
+        }
         if (city1 == null || city1.getGeometry() == null) {
             throw new IllegalArgumentException("City1 must not be null and should have valid geometry.");
         }
@@ -76,7 +88,7 @@ public class RouteServiceImpl implements RouteService {
             HttpPost httpPost = new HttpPost(uriBuilder.toString());
             httpPost.addHeader(HttpHeaders.CONTENT_TYPE, String.valueOf(ContentType.APPLICATION_JSON));
             httpPost.addHeader(HttpHeaders.ACCEPT, String.valueOf(ContentType.APPLICATION_JSON));
-            httpPost.addHeader(HttpHeaders.AUTHORIZATION, config.getAPIKey());
+            httpPost.addHeader(HttpHeaders.AUTHORIZATION, apiKeyService.getApiKey());
 
             //Json Payload
             JSONObject jsonObject = new JSONObject();

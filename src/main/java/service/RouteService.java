@@ -1,5 +1,6 @@
 package service;
 
+import exception.InvalidApiKeyException;
 import model.City;
 import model.Profile;
 
@@ -10,7 +11,7 @@ public interface RouteService {
      * @param cityName
      * @return city
      */
-    City geoCode(String cityName);
+    City geoCode(String cityName) throws InvalidApiKeyException;
 
     /**
      * Computes the distance between 2 given cities using the given profile
@@ -19,7 +20,7 @@ public interface RouteService {
      * @param profile
      * @return
      */
-    Double getDistanceWithProfile(City city1, City city2, Profile profile);
+    Double getDistanceWithProfile(City city1, City city2, Profile profile) throws InvalidApiKeyException;
 
     /**
      * Computes distance between 2 cities with default profile i.e. DRIVING_CAR
@@ -27,5 +28,5 @@ public interface RouteService {
      * @param city2
      * @return
      */
-    Double getDistance(City city1, City city2);
+    Double getDistance(City city1, City city2) throws InvalidApiKeyException;
 }

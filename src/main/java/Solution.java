@@ -1,5 +1,8 @@
+import exception.InvalidApiKeyException;
 import model.TransportationMode;
 import model.City;
+import service.APIKeyService;
+import service.APIKeyServiceImpl;
 import service.RouteService;
 import service.RouteServiceImpl;
 
@@ -15,17 +18,29 @@ public class Solution {
         String transportationMode = args[2];
 
         //Inject RouteService to the calculator
+        APIKeyService apiKeyService = new APIKeyServiceImpl();
+        if (apiKeyService.isValidApiKeyPresent() == false) {
+            System.out.println("A valid API key is required. Please update the API key in config.properties");
+            System.exit(0);
+        }
         RouteService routeService = new RouteServiceImpl();
         CO2EmissionCalculator co2EmissionCalculator = new CO2EmissionCalculator(routeService);
 
-        City city1 = routeService.geoCode(source);
-        if (city1 == null) {
-            System.out.println("Unable to geocode city with name " + source);
-            System.exit(0);
-        }
-        City city2 = routeService.geoCode(destination);
-        if (city2 == null) {
-            System.out.println("Unable to geocode city with name " + destination);
+        City city1 = null;
+        City city2 = null;
+        try {
+            city1 = routeService.geoCode(source);
+            if (city1 == null) {
+                System.out.println("Unable to geocode city with name " + source);
+                System.exit(0);
+            }
+            city2 = routeService.geoCode(destination);
+            if (city2 == null) {
+                System.out.println("Unable to geocode city with name " + destination);
+                System.exit(0);
+            }
+        } catch (InvalidApiKeyException invalidApiKeyException) {
+            System.out.println(invalidApiKeyException.getLocalizedMessage());
             System.exit(0);
         }
 
